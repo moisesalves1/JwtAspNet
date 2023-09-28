@@ -12,11 +12,17 @@ namespace JwtAspNet.Services
 
             var key = Encoding.ASCII.GetBytes(Configuration.PrivateKey);
 
-            new SigningCredentials(
+            var credentials = new SigningCredentials(
                 new SymmetricSecurityKey(key), 
                 SecurityAlgorithms.HmacSha256);
 
-            var token = handler.CreateToken();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                SigningCredentials = credentials,
+                Expires = DateTime.UtcNow.AddHours(2)
+            };
+
+            var token = handler.CreateToken(tokenDescriptor);
             return handler.WriteToken(token);
         }
     }
