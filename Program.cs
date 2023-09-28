@@ -4,8 +4,12 @@ using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<TokenService>();
+builder.Services.AddAuthentication();
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapGet("/", (TokenService service) =>
 {
