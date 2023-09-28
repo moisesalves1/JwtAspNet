@@ -36,6 +36,7 @@ namespace JwtAspNet.Services
             ci.AddClaim(new Claim("id", user.Id.ToString())); // Custom claim
             ci.AddClaim(new Claim(ClaimTypes.Name, user.Email)); // Username
             ci.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+            ci.AddClaim(new Claim(ClaimTypes.GivenName, user.Name));
             ci.AddClaim(new Claim("image", user.Image));
 
             foreach (var role in user.Roles)

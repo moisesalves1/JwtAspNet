@@ -1,8 +1,10 @@
 using JwtAspNet;
+using JwtAspNet.Extensions;
 using JwtAspNet.Models;
 using JwtAspNet.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,9 +45,18 @@ app.MapGet("/login", (TokenService service) =>
         new[] { "student", "premium" });
 
     return service.Create(user);
-});
+}); 
 
-app.MapGet("/restrito", () => "Você tem acesso!").RequireAuthorization();
+app.MapGet("/restrito", (ClaimsPrincipal user) => new 
+    {
+        id = user.Id(),
+        name = user.Name(),
+        email = user.Email(),
+        givenName = user.GivenName(),
+        image = user.Image()
+    })
+.RequireAuthorization();
+
 app.MapGet("/admin", () => "Você tem acesso!").RequireAuthorization("Admin");
 
 app.Run();
