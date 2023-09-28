@@ -1,4 +1,6 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace JwtAspNet.Services
 {
@@ -8,8 +10,13 @@ namespace JwtAspNet.Services
         {
             var handler = new JwtSecurityTokenHandler();
 
-            var token = handler.CreateToken();
+            var key = Encoding.ASCII.GetBytes(Configuration.PrivateKey);
 
+            new SigningCredentials(
+                new SymmetricSecurityKey(key), 
+                SecurityAlgorithms.HmacSha256);
+
+            var token = handler.CreateToken();
             return handler.WriteToken(token);
         }
     }
